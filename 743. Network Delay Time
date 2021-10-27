@@ -1,0 +1,36 @@
+class Solution {
+    public int networkDelayTime(int[][] times, int n, int k) {
+        // array to map
+        Map<Integer, List<int[]>> g = new HashMap<>();
+        for (int[] time : times) {
+            g.computeIfAbsent(time[0], K -> new ArrayList<int[]>()).add(
+                new int[] {time[1], time[2]});
+        }
+        
+        // SSP
+        Map<Integer, Integer> dist = new HashMap<>();
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(a[1], b[1]));
+        pq.offer(new int[]{k, 0});
+        dist.put(k, 0);
+        while (!pq.isEmpty()) {
+            int[] node = pq.poll();
+            if (!g.containsKey(node[0])) 
+                continue;
+            List<int[]> neighbors = g.get(node[0]);
+            for (int[] neighbor : neighbors) {                
+                int index = neighbor[0], totalDist = neighbor[1] + dist.get(node[0]);
+                if (dist.containsKey(index) && totalDist >= dist.get(index)) 
+                    continue;
+                dist.put(index, totalDist);
+                pq.offer(new int[] {index, totalDist});       
+            }
+        }
+        if (dist.size() < n) 
+            return -1;
+        int result = 0;
+
+        for (int v : dist.values())
+            result = Math.max(v, result);
+        return result;
+    }
+}
