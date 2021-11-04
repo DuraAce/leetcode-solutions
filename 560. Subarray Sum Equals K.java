@@ -36,3 +36,29 @@ class Solution {
         return resultCnt;
     }
 }
+
+
+/*
+cleaner solution. Calculate result while build the prefix sum array and map.
+*/
+class Solution {
+    public int subarraySum(int[] nums, int k) {
+        int n = nums.length;
+        if (n == 1) {
+            return nums[0] == k ? 1 : 0;
+        }
+        int cnt = 0;
+        int[] prefix = new int[n];
+        Map<Integer, Integer> existValue = new HashMap<>();
+        existValue.put(0, 1);
+        for (int i = 0; i< n; i++) {
+            prefix[i] = nums[i] + (i - 1 >= 0 ? prefix[i - 1] : 0);
+            // prefix[i] - ?? == k
+            if (existValue.containsKey(prefix[i] - k)) {
+                cnt += existValue.get(prefix[i] - k);
+            } 
+            existValue.put(prefix[i], existValue.getOrDefault(prefix[i], 0) + 1);
+        }
+        return cnt;
+    }
+}
