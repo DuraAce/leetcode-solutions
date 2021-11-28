@@ -45,7 +45,8 @@ class Solution {
 /*
 from answers
 */
-public int compress(char[] chars) {
+class Solution {
+    public int compress(char[] chars) {
         int indexAns = 0, index = 0;
         while(index < chars.length){
             char currentChar = chars[index];
@@ -61,3 +62,4 @@ public int compress(char[] chars) {
         }
         return indexAns;
     }
+}
